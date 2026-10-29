@@ -290,7 +290,7 @@ int main()
      add函式:設兩個多項式的非零項數分別為m和n，時間複雜度則為 $O(m + n)$。
      mult函式的時間複雜度為 $O((m \dot n)^2)$
      eval函式:設多項式共有n個非零項，時間複雜度則為 $O(n)$。
-3. 空間複雜度：空間複雜度為 $O(t)$。
+3. 空間複雜度：設多項式共有n個非零項，空間複雜度為 $O(t)$。
 
 ## 測試與驗證
 
@@ -310,86 +310,10 @@ int main()
 
 ## 申論及開發報告
 
-### 選擇遞迴的原因
-
-在本程式中，使用遞迴來計算的主要原因為:
-   題目以明確指出符合特定條件則需再次使用阿克曼函式計算，剛好符合遞迴的結構。
-
-
-
-作業一問題二
-
-## 解題說明
-
-這題是輸出字元集合的所有子集合。
-
-### 解題策略
-
-1. 定義函式
-2. 若index == n則結束遞迴呼叫並輸出陣列
-3. index != n則遞迴呼叫 
-4. 把目前的字元放入陣列
-5. 在遞迴
-6. 主程式將字元陣列輸入遞迴函式計算。
-
-## 程式實作
-
-以下為主要程式碼：
-
-```cpp
-#include <iostream>
-
-using namespace std;
-
-void func(char S[], int n, int index, char current[], int currentSize) {
-    
-    if (index == n) {
-        cout << "(";
-        for (int i = 0; i < currentSize; ++i) {
-            cout << current[i];
-            if (i < currentSize - 1) {
-                cout << ",";
-            }
-        }
-        cout << ") ";
-        return;
-    }
-
-    func(S, n, index + 1, current, currentSize);
-
-    current[currentSize] = S[index];
-    func(S, n, index + 1, current, currentSize + 1);
-}
-
-int main() {
-    char S[] = { 'a', 'b', 'c'};
-    int n = sizeof(S) / sizeof(S[0]);
-
-    char current[1000];
-
-    cout << "powerset (S) = { ";
-    func(S, n, 0, current, 0);
-    cout << "}" << endl;
-
-}
-```
-
-## 效能分析
-
-1. 時間複雜度：程式的時間複雜度為 $O(2^n)$。
-2. 空間複雜度：空間複雜度為 $O(n)$。
-
-## 測試與驗證
-
-### 測試案例
-
-| 測試案例 | 輸入參數 | 預期輸出 | 實際輸出 |
-|----------|--------------|----------|----------|
-| 測試一   | a, b, c | powerset (S) = { () (a) (b) (c) (a,b) (a,c) (b,c) (a,b,c) } | powerset (S) = { () (c) (b) (b,c) (a) (a,c) (a,b) (a,b,c) } |
-
-## 申論及開發報告
-
-在本程式中，使用遞迴來計算的主要原因為:
-   使用二元判斷能簡單達成題目要求，而二元判斷剛好符合遞迴的結構。
-
-需再研究能按照字母順序輸出的方式。
+### 問題與解決方法
+    開發過程中遇到的問題主要有兩個:
+        1.未建立copy constructor:進行多項式運算時會將答案儲存近一個新的多項式類別中，但若未建立copy constructor在複製過程會出現錯誤，造成程式崩潰。
+            解決方法:建立copy constructor。
+        2.未合併次方數相同的項:進行多項式相乘時可能產生複數個次方數相同的項，會造成輸出兩個相同次方的項(例：$(x^2+2)*(x^2+1)$=$x^4+x^2+2x^2+2$)。
+            解決方法:在newterm函式中使用for迴圈檢查是否已經儲存過次方數相同的項，若有則直接加上coef。
+            
