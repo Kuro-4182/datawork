@@ -188,8 +188,15 @@ istream& operator>>(istream& is, polynomial& p) {
     for (int i = 0; i < numterms; i++) {
         float coef;
         int exp;
-        cout << "請輸入第 " << i + 1 << " 項的係數與指數 (如: 3 2):";
-        is >> coef >> exp;
+
+        while (true) {
+            cout << "請輸入第 " << i + 1 << " 項的係數與指數 (如: 3 2):";
+            is >> coef >> exp;
+
+            if (exp >= 0)break;
+            cout << "[錯誤]請重新輸入!\n";
+
+        }
 
         p.newterm(coef, exp);
 
